@@ -1,3 +1,37 @@
+# Лабораторная №2 — ETL на Apache Spark
+
+## Запуск
+```powershell
+docker compose build spark
+docker compose up -d postgres clickhouse
+docker compose run --rm spark all
+```
+
+ClickHouse также доступен в браузере: [SQL-интерфейс](http://localhost:8123/play), пользователь `lab`, пароль `lab`.
+
+## Проверка вручную
+
+В PostgreSQL:
+
+```sql
+SELECT count(*) AS sales, sum(sale_quantity) AS units,
+       sum(sale_total_price) AS revenue
+FROM fact_sales;
+-- 10000 | 54623 | 2529852.12
+```
+
+В ClickHouse:
+
+```sql
+SELECT product_name, units, revenue, sales_rank
+FROM analytics.report_products
+WHERE row_type = 'product' AND sales_rank <= 10
+ORDER BY sales_rank;
+```
+
+
+
+
 # BigDataSpark
 
 Анализ больших данных - лабораторная работа №2 - ETL реализованный с помощью Spark
@@ -85,3 +119,4 @@
 7. Код Apache Spark трансформации данных из снежинки/звезды в отчеты в Neo4j.
 8. Код Apache Spark трансформации данных из снежинки/звезды в отчеты в MongoDB.
 9. Код Apache Spark трансформации данных из снежинки/звезды в отчеты в Valkey.
+
